@@ -1,0 +1,10 @@
+[target.thumbv7em-none-eabi]
+rustflags = [
+  "-C", "link-arg=-Tnrf52810_xxaa.ld",
+  "-C", "linker=arm-none-eabi-ld",
+  "-Z", "linker-flavor=ld",
+]
+
+[build]
+target = "thumbv7em-none-eabi"
+incremental = false

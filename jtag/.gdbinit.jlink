@@ -1,0 +1,4 @@
+target remote localhost:2331
+monitor speed 30
+file ../target/thumbv7em-none-eabi/debug/nrf52dk.hex
+monitor reset
