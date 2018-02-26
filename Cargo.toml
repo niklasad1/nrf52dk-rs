@@ -2,6 +2,7 @@
 name = "nrf52dk-rs"
 version = "0.0.0"
 authors = ["Niklas Adolfsson <niklasadolfsson1@gmail.com>"]
+build = "build.rs"
 license = "MIT"
 description = ""
 

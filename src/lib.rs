@@ -1,10 +1,12 @@
-#![feature(asm,compiler_builtins_lib,const_fn,global_allocator,lang_items,naked_functions)]
+#![feature(asm,compiler_builtins_lib,lang_items,naked_functions)]
 #![no_std]
-#![crate_type="staticlib"]
+// #![crate_type="staticlib"]
 
 extern crate compiler_builtins;
 
 mod lang_items;
+
+use core::ptr;
 
 extern "C" {
 
@@ -45,25 +47,17 @@ pub static ISRVectors: [Option<unsafe extern "C" fn()>; 16] = [Some(__StackTop),
                                                                Some(isr_pendsv), // PendSV
                                                                Some(isr_systick) /* SysTick */];
 
+// Placeholder
+#[link_section = ".vectors"]
+#[no_mangle] // Ensures that the symbol is kept until the final binary
+pub static IRQS: [unsafe extern "C" fn(); 80] = [generic_isr; 80];
 
-#[link_section=".flashconfig"]
-#[allow(non_upper_case_globals)]
-#[no_mangle]
-pub static flashconfigbytes: [usize; 4] = [0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFE];
-
-#[no_mangle]
+// The linker file expects this
 #[naked]
-#[inline(never)]
 #[allow(non_snake_case)]
-pub unsafe extern "C" fn Reset_Handler() {
-    panic!("oo")
-}
-
-
 #[no_mangle]
-#[naked]
-#[inline(never)]
-pub unsafe extern "C" fn _start() {
+#[link_section=".start"]
+pub unsafe extern "C" fn Reset_Handler() {
     let mut src: *mut u32 = &mut __etext;
     let mut dest: *mut u32 = &mut __data_start__;
 
@@ -81,10 +75,28 @@ pub unsafe extern "C" fn _start() {
         *dest = 0;
         dest = ((dest as u32) + 4) as *mut u32;
     }
+
+    // SystemInit
+    init();
+    
+    // _start
+    start_program();
 }
 
 
-pub fn rust_loop() {
+#[no_mangle]
+#[inline(never)]
+pub fn init() {
+}
+
+// Call main program/example last entry point
+pub unsafe fn start_program() -> ! {
+     extern "C" {
+        // This function is created internally by`rustc`. See `src/lang_items.rs` for more details.
+        fn main(argc: isize, argv: *const *const u8) -> isize;
+    }
+    
+    main(0, ptr::null());
     loop {}
 }
 
@@ -126,5 +138,8 @@ pub unsafe extern "C" fn isr_pendsv() {
     loop {}
 }
 pub unsafe extern "C" fn isr_systick() {
+    loop {}
+}
+pub unsafe extern "C" fn generic_isr() {
     loop {}
 }
