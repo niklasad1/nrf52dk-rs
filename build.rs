@@ -1,3 +1,6 @@
+extern crate gcc;
+
+use gcc::Build;
 use std::env;
 use std::path::PathBuf;
 use std::fs::File;
