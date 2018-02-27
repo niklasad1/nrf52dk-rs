@@ -31,7 +31,7 @@ $ make
 ```
 ### Build and flash via JLink
 ```bash
-$ make flash
+$ make flash app=blinky
 ```
  
 ### Debug via gdb

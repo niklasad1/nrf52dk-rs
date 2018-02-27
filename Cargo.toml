@@ -1,14 +1,18 @@
 [package]
 name = "nrf52dk-rs"
-version = "0.0.0"
+categories = ["embedded", "hardware-support", "no-std"]
+version = "0.0.1"
 authors = ["Niklas Adolfsson <niklasadolfsson1@gmail.com>"]
 license = "MIT"
-description = ""
+description = "bare-metal on nrf52dk"
+
+[dependencies]
+cortex-m = "0.4.3"
+vcell = "0.1.0"
 
 [profile.dev]
 panic = "abort"
 lto = true
-debug = true
 
 [profile.release]
 panic = "abort"
