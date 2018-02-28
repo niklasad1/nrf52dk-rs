@@ -1,4 +1,4 @@
 target remote localhost:2331
 monitor speed 30
-file ../target/thumbv7em-none-eabi/debug/examples/hello
+file ../target/thumbv7em-none-eabi/debug/examples/blinky
 monitor reset

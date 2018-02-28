@@ -10,8 +10,12 @@
 #### Rust
 ```
 $ curl https://sh.rustup.rs -sSf | sh
+# Install nightly Rust
 $ rustup install nightly-2017-08-16
+# Install Rust source
 $ rustup component add rust-src
+# Disable incremental compilation
+$ export CARGO_INCREMENTAL=0
 ```
 
 #### Xargo
@@ -42,3 +46,7 @@ $ arm-none-eabi-gdb -x gdbinit.jlink
 $ b reset_handler
 $ b main
 ```
+
+### Contributing
+
+Pull requests are welcome and create issues for questions or similar

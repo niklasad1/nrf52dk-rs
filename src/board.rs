@@ -17,3 +17,12 @@ const BUTTON_RESET_PIN: u32 = 21;
 pub const LEDS: [u32; 4] = [LED1_PIN, LED2_PIN, LED3_PIN, LED4_PIN];
 /// NRF52-DKs Buttons
 pub const BUTTONS: [u32; 5] = [BUTTON1_PIN, BUTTON2_PIN, BUTTON3_PIN, BUTTON4_PIN, BUTTON_RESET_PIN];
+
+/// NRF52-DK UART RTS
+pub const UART_RTS: u32 = 5;
+/// NRF52-DK UART TXD
+pub const UART_TXD: u32 = 6;
+/// NRF52-DK UART CTS
+pub const UART_CTS: u32 = 7;
+/// NRF52-DK UART RXD
+pub const UART_RXD: u32 = 8;
