@@ -10,7 +10,7 @@
 //! Checkout [TockOS](https://github.com/helena-project/tock)
 
 // #![deny(missing_docs)]
-// #![deny(warnings)]
+#![deny(warnings)]
 #![crate_type="staticlib"]
 #![feature(asm, compiler_builtins_lib, lang_items, naked_functions, const_fn)]
 
@@ -19,6 +19,8 @@
 extern crate compiler_builtins;
 extern crate cortex_m;
 extern crate vcell;
+#[macro_use(register_bitfields, register_bitmasks)]
+extern crate tock_registers;
 
 mod lang_items;
 
