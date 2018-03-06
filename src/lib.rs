@@ -3,14 +3,14 @@
 //! A crate that provides bare-metal support for nrf52dk without any depenendecies to Nordic
 //! SoftDevice or similar
 //!
-//! Still very WIP and only a crate for playing around so far and many drivers are based 
+//! Still very WIP and only a crate for playing around so far and many drivers are based
 //! on drivers from [TockOS](https://github.com/helena-project/tock)
 //!
-//! For more stable support for nrf52dk: 
+//! For more stable support for nrf52dk:
 //! Checkout [TockOS](https://github.com/helena-project/tock)
 
 // #![deny(missing_docs)]
-#![deny(warnings)]
+// #![deny(warnings)]
 #![crate_type="staticlib"]
 #![feature(asm, compiler_builtins_lib, lang_items, naked_functions, const_fn)]
 
@@ -24,7 +24,7 @@ extern crate tock_registers;
 
 mod lang_items;
 
-/// Drivers for peripherals 
+/// Drivers for peripherals
 pub mod peripherals;
 /// Board specific definitions
 pub mod board;
@@ -95,7 +95,7 @@ pub unsafe extern "C" fn reset_handler() {
 
     // Start all clocks
     let clock = &peripherals::clock::CLOCK;
-    
+
     clock.low_stop();
     clock.high_stop();
 
@@ -105,7 +105,7 @@ pub unsafe extern "C" fn reset_handler() {
     clock.high_start();
     while !clock.low_started() {}
     while !clock.high_started() {}
-    
+
     cortex_m::interrupt::enable();
 
     main(0, ptr::null());

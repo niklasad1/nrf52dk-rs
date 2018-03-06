@@ -77,5 +77,3 @@ impl Gpio {
         regs.out.set((1 << pin) ^ regs.out.get());
     }
 }
-
-

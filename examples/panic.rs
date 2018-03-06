@@ -1,6 +1,6 @@
-#![no_std]
-
 //! Panic example
+
+#![no_std]
 
 extern crate nrf52dk_rs;
 

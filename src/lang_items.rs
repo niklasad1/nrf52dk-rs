@@ -23,7 +23,7 @@ unsafe extern "C" fn rust_begin_unwind() {
 
     loop {
         for _ in 0..100000 {}
-        
+
         for led in LEDS.iter() {
             gpio.toggle(*led);
         }
