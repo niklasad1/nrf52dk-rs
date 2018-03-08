@@ -14,7 +14,7 @@ use tock_registers::common::regs::{WriteOnly, ReadWrite, ReadOnly};
 
 const CLOCK_BASE: usize = 0x40000000;
 
-pub static mut CLOCK: Clock = Clock::new();
+pub static CLOCK: Clock = Clock::new();
 
 /// Low frequency clock source
 pub enum LowClockSource {
@@ -202,3 +202,7 @@ register_bitfields! [u32,
         ]
     ]
 ];
+
+unsafe impl Send for Clock {}
+unsafe impl Sync for Clock {}
+

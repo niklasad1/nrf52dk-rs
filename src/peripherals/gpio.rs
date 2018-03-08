@@ -12,7 +12,7 @@ const GPIOTE_BASE: usize = 0x40006000;
 const NUMBER_PINS: usize = 32;
 
 /// GPIO Singleton, use this as reference to access drivers
-pub static mut GPIO: Gpio = Gpio::new();
+pub static GPIO: Gpio = Gpio::new();
 
 /// GPIO Registers
 #[repr(C)]
@@ -77,3 +77,6 @@ impl Gpio {
         regs.out.set((1 << pin) ^ regs.out.get());
     }
 }
+
+unsafe impl Send for Gpio {}
+unsafe impl Sync for Gpio {}

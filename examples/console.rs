@@ -15,4 +15,5 @@ fn main() {
         uart.initialize(BAUDRAUTE);
         uart.transmit(&BUFFER);
     }
+    loop {}
 }

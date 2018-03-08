@@ -6,7 +6,7 @@ use board;
 const UART_BASE: u32 = 0x40002000;
 
 /// Uart Singleton
-pub static mut UART: Uart = Uart::new();
+pub static UART: Uart = Uart::new();
 
 /// Uart
 pub struct Uart {
@@ -57,6 +57,14 @@ impl Uart {
         }
     }
 
+    #[allow(unused)]
+    /// Interrupts are not enabled yet
+    unsafe fn enable_interrupts(&self) {
+        let regs = &*self.registers;
+        regs.intenset
+            .write(Interrupt::ENDTX::SET + Interrupt::ERROR::SET + Interrupt::TXSTARTED::SET);
+    }
+
     /// Transmit
     pub unsafe fn transmit(&self, buffer: &'static [u8]) {
         let regs = &*self.registers;
@@ -68,17 +76,22 @@ impl Uart {
         let ptr = buffer.as_ptr();
         regs.txd_ptr.set(ptr as u32);
         regs.txd_maxcnt.set(buffer.len() as u32);
-        regs.enable.write(Enable::ENABLE.val(8));
+        regs.enable.write(Enable::ENABLE::ENABLED);
         regs.task_stoptx.write(Task::ENABLE::SET);
         regs.task_starttx.write(Task::ENABLE::SET);
 
-        // busy-wait
-        while regs.event_txstarted.matches(Event::READY::CLEAR) {}
+        self.enable_interrupts();
 
-        // busy-wait
-        while regs.event_endtx.matches(Event::READY::CLEAR) {}
+        // // busy-wait
+        // while regs.event_txstarted.matches(Event::READY::CLEAR) {}
+
+        // // busy-wait
+        // while regs.event_endtx.matches(Event::READY::CLEAR) {}
     }
 }
+
+unsafe impl Send for Uart {}
+unsafe impl Sync for Uart {}
 
 #[repr(C)]
 struct UartTeRegisters {
@@ -131,52 +144,81 @@ struct UartTeRegisters {
     pub config: ReadWrite<u32, Config::Register>, // 0x56C-0x570
 }
 
+#[cfg_attr(rustfmt, rustfmt_skip)]
 register_bitfields! [u32,
-Task [
-ENABLE OFFSET(0) NUMBITS(1)
-],
-Event [
-READY OFFSET(0) NUMBITS(1)
-],
-Shorts [
-ENDRX_STARTRX OFFSET(5) NUMBITS(1),
-ENDRX_STOPRX OFFSET(6) NUMBITS(1)
-],
-Interrupt [
-CTS OFFSET(0) NUMBITS(1),
-NCTS OFFSET(1) NUMBITS(1),
-ENDRX OFFSET(4) NUMBITS(1),
-ENDTX OFFSET(8) NUMBITS(1),
-ERROR OFFSET(9) NUMBITS(1),
-RXTO OFFSET(17) NUMBITS(1),
-RXSTARTED OFFSET(19) NUMBITS(1),
-TXSTARTED OFFSET(20) NUMBITS(1),
-TXSTOPPED OFFSET(22) NUMBITS(1)
-],
-ErrorSrc [
-OVERRUN OFFSET(0) NUMBITS(1),
-PARITY OFFSET(1) NUMBITS(1),
-FRAMING OFFSET(2) NUMBITS(1),
-BREAK OFFSET(3) NUMBITS(1)
-],
-Enable [
-ENABLE OFFSET(0) NUMBITS(4)
-],
-Psel [
-PIN OFFSET(0) NUMBITS(5),
-CONNECT OFFSET(31) NUMBITS(1)
-],
-Baudrate [
-BAUDRAUTE OFFSET(0) NUMBITS(32)
-],
-Pointer [
-POINTER OFFSET(0) NUMBITS(32)
-],
-Counter [
-COUNTER OFFSET(0) NUMBITS(8)
-],
-Config [
-HWFC OFFSET(0) NUMBITS(1),
-PARITY OFFSET(1) NUMBITS(3)
-]
+    /// Start task
+    Task [
+        ENABLE OFFSET(0) NUMBITS(1)
+    ],
+
+    /// Read event
+    Event [
+        READY OFFSET(0) NUMBITS(1)
+    ],
+    
+    /// Shortcuts
+    Shorts [
+        /// Shortcut between ENDRX and STARTRX
+        ENDRX_STARTRX OFFSET(5) NUMBITS(1),
+        /// Shortcut between ENDRX and STOPRX
+        ENDRX_STOPRX OFFSET(6) NUMBITS(1)
+    ],
+
+    /// UART Interrups
+    Interrupt [
+        CTS OFFSET(0) NUMBITS(1),
+        NCTS OFFSET(1) NUMBITS(1),
+        ENDRX OFFSET(4) NUMBITS(1),
+        ENDTX OFFSET(8) NUMBITS(1),
+        ERROR OFFSET(9) NUMBITS(1),
+        RXTO OFFSET(17) NUMBITS(1),
+        RXSTARTED OFFSET(19) NUMBITS(1),
+        TXSTARTED OFFSET(20) NUMBITS(1),
+        TXSTOPPED OFFSET(22) NUMBITS(1)
+    ],
+    
+    /// UART Errors
+    ErrorSrc [
+        OVERRUN OFFSET(0) NUMBITS(1),
+        PARITY OFFSET(1) NUMBITS(1),
+        FRAMING OFFSET(2) NUMBITS(1),
+        BREAK OFFSET(3) NUMBITS(1)
+    ],
+    
+    /// Enable UART
+    Enable [
+        ENABLE OFFSET(0) NUMBITS(4) [
+           ENABLED = 8,
+           DISABLED = 0
+        ]
+    ],
+    
+    /// Pin select
+    Psel [
+        /// Pin number
+        PIN OFFSET(0) NUMBITS(5),
+        /// Connect/Disconnect
+        CONNECT OFFSET(31) NUMBITS(1)
+    ],
+    
+    /// Baudrate
+    Baudrate [
+        BAUDRAUTE OFFSET(0) NUMBITS(32)
+    ],
+    
+    /// DMA pointer
+    Pointer [
+        POINTER OFFSET(0) NUMBITS(32)
+    ],
+    
+    /// Counter value
+    Counter [
+        COUNTER OFFSET(0) NUMBITS(8)
+    ],
+    
+    /// Configuration of parity and flow control
+    Config [
+        HWFC OFFSET(0) NUMBITS(1),
+        PARITY OFFSET(1) NUMBITS(3)
+    ]
 ];

@@ -30,6 +30,130 @@ pub mod peripherals;
 pub mod board;
 
 use core::ptr;
+use cortex_m::interrupt::{self, Nr};
+
+pub enum Interrupt {
+    #[doc = "0 - POWER_CLOCK"]
+    POWER_CLOCK,
+    #[doc = "1 - RADIO"]
+    RADIO,
+    #[doc = "2 - UARTE0_UART0"]
+    UARTE0_UART0,
+    #[doc = "3 - SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0"]
+    SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0,
+    #[doc = "4 - SPIM1_SPIS1_TWIM1_TWIS1_SPI1_TWI1"]
+    SPIM1_SPIS1_TWIM1_TWIS1_SPI1_TWI1,
+    #[doc = "5 - NFCT"]
+    NFCT,
+    #[doc = "6 - GPIOTE"]
+    GPIOTE,
+    #[doc = "7 - SAADC"]
+    SAADC,
+    #[doc = "8 - TIMER0"]
+    TIMER0,
+    #[doc = "9 - TIMER1"]
+    TIMER1,
+    #[doc = "10 - TIMER2"]
+    TIMER2,
+    #[doc = "11 - RTC0"]
+    RTC0,
+    #[doc = "12 - TEMP"]
+    TEMP,
+    #[doc = "13 - RNG"]
+    RNG,
+    #[doc = "14 - ECB"]
+    ECB,
+    #[doc = "15 - CCM_AAR"]
+    CCM_AAR,
+    #[doc = "16 - WDT"]
+    WDT,
+    #[doc = "17 - RTC1"]
+    RTC1,
+    #[doc = "18 - QDEC"]
+    QDEC,
+    #[doc = "19 - COMP_LPCOMP"]
+    COMP_LPCOMP,
+    #[doc = "20 - SWI0_EGU0"]
+    SWI0_EGU0,
+    #[doc = "21 - SWI1_EGU1"]
+    SWI1_EGU1,
+    #[doc = "22 - SWI2_EGU2"]
+    SWI2_EGU2,
+    #[doc = "23 - SWI3_EGU3"]
+    SWI3_EGU3,
+    #[doc = "24 - SWI4_EGU4"]
+    SWI4_EGU4,
+    #[doc = "25 - SWI5_EGU5"]
+    SWI5_EGU5,
+    #[doc = "26 - TIMER3"]
+    TIMER3,
+    #[doc = "27 - TIMER4"]
+    TIMER4,
+    #[doc = "28 - PWM0"]
+    PWM0,
+    #[doc = "29 - PDM"]
+    PDM,
+    #[doc = "32 - MWU"]
+    MWU,
+    #[doc = "33 - PWM1"]
+    PWM1,
+    #[doc = "34 - PWM2"]
+    PWM2,
+    #[doc = "35 - SPIM2_SPIS2_SPI2"]
+    SPIM2_SPIS2_SPI2,
+    #[doc = "36 - RTC2"]
+    RTC2,
+    #[doc = "37 - I2S"]
+    I2S,
+    #[doc = "38 - FPU"]
+    FPU,
+}
+
+unsafe impl Nr for Interrupt {
+    #[inline]
+    fn nr(&self) -> u8 {
+        match *self {
+            Interrupt::POWER_CLOCK => 0,
+            Interrupt::RADIO => 1,
+            Interrupt::UARTE0_UART0 => 2,
+            Interrupt::SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0 => 3,
+            Interrupt::SPIM1_SPIS1_TWIM1_TWIS1_SPI1_TWI1 => 4,
+            Interrupt::NFCT => 5,
+            Interrupt::GPIOTE => 6,
+            Interrupt::SAADC => 7,
+            Interrupt::TIMER0 => 8,
+            Interrupt::TIMER1 => 9,
+            Interrupt::TIMER2 => 10,
+            Interrupt::RTC0 => 11,
+            Interrupt::TEMP => 12,
+            Interrupt::RNG => 13,
+            Interrupt::ECB => 14,
+            Interrupt::CCM_AAR => 15,
+            Interrupt::WDT => 16,
+            Interrupt::RTC1 => 17,
+            Interrupt::QDEC => 18,
+            Interrupt::COMP_LPCOMP => 19,
+            Interrupt::SWI0_EGU0 => 20,
+            Interrupt::SWI1_EGU1 => 21,
+            Interrupt::SWI2_EGU2 => 22,
+            Interrupt::SWI3_EGU3 => 23,
+            Interrupt::SWI4_EGU4 => 24,
+            Interrupt::SWI5_EGU5 => 25,
+            Interrupt::TIMER3 => 26,
+            Interrupt::TIMER4 => 27,
+            Interrupt::PWM0 => 28,
+            Interrupt::PDM => 29,
+            Interrupt::MWU => 32,
+            Interrupt::PWM1 => 33,
+            Interrupt::PWM2 => 34,
+            Interrupt::SPIM2_SPIS2_SPI2 => 35,
+            Interrupt::RTC2 => 36,
+            Interrupt::I2S => 37,
+            Interrupt::FPU => 38,
+        }
+    }
+}
+
 
 /// Symbols that are exported from the linker script
 extern "C" {
@@ -91,8 +215,6 @@ pub unsafe extern "C" fn reset_handler() {
 
     init();
 
-    // FIXME: Here we should enable clocks and similar things
-
     // Start all clocks
     let clock = &peripherals::clock::CLOCK;
 
@@ -106,6 +228,8 @@ pub unsafe extern "C" fn reset_handler() {
     while !clock.low_started() {}
     while !clock.high_started() {}
 
+    let mut peripherals = cortex_m::Peripherals::take().unwrap();
+    peripherals.NVIC.enable(Interrupt::UARTE0_UART0);
     cortex_m::interrupt::enable();
 
     main(0, ptr::null());

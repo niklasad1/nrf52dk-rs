@@ -6,7 +6,7 @@ use nrf52dk_rs::peripherals::gpio::GPIO;
 use nrf52dk_rs::board::LEDS;
 
 fn main() {
-    let gpio = unsafe { &GPIO };
+    let gpio = &GPIO;
 
     // configure LEDs
     for led in LEDS.iter() {
