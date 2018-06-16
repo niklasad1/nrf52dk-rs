@@ -1,8 +1,7 @@
-# [WIP] nrf52dk-bare-metal-rs
+nrf52dk-rs
 
 ## Requirements
 1. [Rust](http://www.rust-lang.org/) (install via `rustup`)
-2. [Xargo](http://www.rust-lang.org/) (Rust `cargo` wrapper that installs core library for embedded targets)
 3. [arm-none-eabi toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 
 ### Installation
@@ -11,21 +10,15 @@
 ```
 $ curl https://sh.rustup.rs -sSf | sh
 # Install nightly Rust
-$ rustup install nightly-2017-08-16
+$ rustup install nightly
 # Install Rust source
 $ rustup component add rust-src
 # Disable incremental compilation
 $ export CARGO_INCREMENTAL=0
 ```
 
-#### Xargo
-```bash
-$ cargo install xargo
-```
-
 #### arm-none-eabi toolchain
 Use your packet manager or download it from [here](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
-
 
 ## Usage
 
