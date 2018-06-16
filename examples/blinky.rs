@@ -2,8 +2,8 @@
 
 extern crate nrf52dk_rs;
 
-use nrf52dk_rs::peripherals::gpio::GPIO;
 use nrf52dk_rs::board::LEDS;
+use nrf52dk_rs::peripherals::gpio::GPIO;
 
 fn main() {
     let gpio = &GPIO;

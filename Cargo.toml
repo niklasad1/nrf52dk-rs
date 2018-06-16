@@ -7,9 +7,8 @@ license = "MIT"
 description = "bare-metal on nrf52dk"
 
 [dependencies]
-cortex-m = "0.4.3"
-vcell = "0.1.0"
-tock_registers = { path = "tock_registers" }
+cortex-m = "0.5"
+tock-regs = { git = "https://github.com/tock/tock.git", branch = "seperate-registers" }
 
 [profile.dev]
 panic = "abort"
@@ -18,6 +17,3 @@ lto = true
 [profile.release]
 panic = "abort"
 lto = true
-
-[features]
-abort-on-panic = []

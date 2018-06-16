@@ -6,14 +6,14 @@ JLINK_SCRIPTS_DIR=jtag/
 
 .PHONY: build
 build:
-	xargo build --examples
+	cargo build --examples
 
 .PHONY: flash
 flash: 	
-	xargo build --example $(app)
+	cargo build --example $(app)
 	$(OBJCOPY) -Oihex $(TARGET)/$(app) $(TARGET)/application.hex
 	$(JLINK) $(JLINK_OPTIONS) $(JLINK_SCRIPTS_DIR)/flash.jlink
 
 .PHONY: clean
 clean: 	
-	xargo clean
+	cargo clean

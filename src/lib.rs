@@ -11,27 +11,25 @@
 
 // #![deny(missing_docs)]
 // #![deny(warnings)]
-#![crate_type="staticlib"]
-#![feature(asm, compiler_builtins_lib, lang_items, naked_functions, const_fn)]
-
+#![crate_type = "staticlib"]
+#![feature(asm, extern_prelude, lang_items, start, naked_functions, const_fn, panic_implementation)]
 #![no_std]
 
-extern crate compiler_builtins;
 extern crate cortex_m;
-extern crate vcell;
-#[macro_use(register_bitfields, register_bitmasks)]
-extern crate tock_registers;
+// extern crate vcell;
+#[macro_use]
+extern crate tock_regs;
 
 mod lang_items;
 
-/// Drivers for peripherals
-pub mod peripherals;
 /// Board specific definitions
 pub mod board;
+/// Drivers for peripherals
+pub mod peripherals;
 
-use core::ptr;
-use cortex_m::interrupt::{self, Nr};
+use cortex_m::interrupt::Nr;
 
+#[allow(non_camel_case_types)]
 pub enum Interrupt {
     #[doc = "0 - POWER_CLOCK"]
     POWER_CLOCK,
@@ -154,7 +152,6 @@ unsafe impl Nr for Interrupt {
     }
 }
 
-
 /// Symbols that are exported from the linker script
 extern "C" {
     /// Start of the text section to copy from
@@ -232,7 +229,7 @@ pub unsafe extern "C" fn reset_handler() {
     peripherals.NVIC.enable(Interrupt::UARTE0_UART0);
     cortex_m::interrupt::enable();
 
-    main(0, ptr::null());
+    main(0, core::ptr::null());
 }
 
 /// Initilization of processor that copies data from Flash to RAM
