@@ -29,13 +29,13 @@ name = "nrf52dk-rs"
 version = "0.0.1"
 dependencies = [
  "cortex-m 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
- "tock-regs 0.1.0 (git+https://github.com/tock/tock.git?branch=seperate-registers)",
+ "tock-regs 0.1.0 (git+https://github.com/tock/tock.git)",
 ]
 
 [[package]]
 name = "tock-regs"
 version = "0.1.0"
-source = "git+https://github.com/tock/tock.git?branch=seperate-registers#d3509fab6c5ea5bf2def527d7ee06bd2253363e0"
+source = "git+https://github.com/tock/tock.git#c879d5f7f78d28401f0442e1acb34b13f3d97e74"
 
 [[package]]
 name = "vcell"
@@ -55,6 +55,6 @@ dependencies = [
 "checksum bare-metal 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "517bf6fd0a06665f8a6d094d3a520f1d0a989c3d114470a75a84a39204e69e96"
 "checksum cc 1.0.17 (registry+https://github.com/rust-lang/crates.io-index)" = "49ec142f5768efb5b7622aebc3fdbdbb8950a4b9ba996393cb76ef7466e8747d"
 "checksum cortex-m 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)" = "93ceb454f8942689dae03a0b1d6b6e866f30acb5358ada9698e71f2728cd4924"
-"checksum tock-regs 0.1.0 (git+https://github.com/tock/tock.git?branch=seperate-registers)" = "<none>"
+"checksum tock-regs 0.1.0 (git+https://github.com/tock/tock.git)" = "<none>"
 "checksum vcell 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "45c297f0afb6928cd08ab1ff9d95e99392595ea25ae1b5ecf822ff8764e57a0d"
 "checksum volatile-register 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "0d67cb4616d99b940db1d6bd28844ff97108b498a6ca850e5b6191a532063286"

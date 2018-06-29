@@ -7,8 +7,8 @@ license = "MIT"
 description = "bare-metal on nrf52dk"
 
 [dependencies]
-cortex-m = "0.5"
-tock-regs = { git = "https://github.com/tock/tock.git", branch = "seperate-registers" }
+cortex-m = "0.5.2"
+tock-regs = { git = "https://github.com/tock/tock.git" }
 
 [profile.dev]
 panic = "abort"
