@@ -18,7 +18,7 @@
 extern crate cortex_m;
 // extern crate vcell;
 #[macro_use]
-extern crate tock_regs;
+extern crate tock_registers;
 
 mod lang_items;
 

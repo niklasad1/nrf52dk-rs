@@ -2,7 +2,7 @@
 //! Simplest possible implementation
 //! Note, that the GPIOs are active low
 
-use tock_regs::regs::ReadWrite;
+use tock_registers::registers::ReadWrite;
 
 const GPIO_BASE: usize = 0x5000_0000;
 #[allow(dead_code)]

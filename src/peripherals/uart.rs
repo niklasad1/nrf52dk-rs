@@ -1,7 +1,7 @@
 //! UART
 
 use board;
-use tock_regs::regs::{ReadOnly, ReadWrite, WriteOnly};
+use tock_registers::registers::{ReadOnly, ReadWrite, WriteOnly};
 
 const UART_BASE: u32 = 0x4000_2000;
 

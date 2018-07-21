@@ -10,9 +10,9 @@
 //!     * 64 MHz crystal oscillator (HFXO)
 //!     * HFXO must be running the run the RADIO, NFC and calibration
 
-use tock_regs::regs::{ReadOnly, ReadWrite, WriteOnly};
+use tock_registers::registers::{ReadOnly, ReadWrite, WriteOnly};
 
-const CLOCK_BASE: usize = 0x40000000;
+const CLOCK_BASE: usize = 0x4000_0000;
 
 pub static CLOCK: Clock = Clock::new();
 
