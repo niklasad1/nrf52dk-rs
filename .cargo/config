@@ -1,8 +1,7 @@
 [target.thumbv7em-none-eabi]
+runner = 'arm-none-eabi-gdb'
 rustflags = [
   "-C", "link-arg=-Tnrf52.ld",
-  "-C", "linker=arm-none-eabi-ld",
-  "-Z", "linker-flavor=ld",
 ]
 
 [build]

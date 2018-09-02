@@ -13,12 +13,13 @@ $ curl https://sh.rustup.rs -sSf | sh
 $ rustup install nightly
 # Install Rust source
 $ rustup component add rust-src
+# Install target `thumbv7em-none-eabi`
+$ rustup target add thumbv7em-none-eabi
+# Install llvm-tools
+$ rustup component add llvm-tools-preview --toolchain=nightly
 # Disable incremental compilation
 $ export CARGO_INCREMENTAL=0
 ```
-
-#### arm-none-eabi toolchain
-Use your packet manager or download it from [here](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 
 ## Usage
 

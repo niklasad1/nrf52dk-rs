@@ -1,5 +1,6 @@
 TARGET=target/thumbv7em-none-eabi/debug/examples
-OBJCOPY=arm-none-eabi-objcopy
+# assuming `nightly` and `llvm-tools installed`
+OBJCOPY=$(shell rustc --print sysroot)/bin/llvm-objcopy
 JLINK=JLinkExe
 JLINK_OPTIONS+=-device nrf52 -if swd -speed 1200 -AutoConnect 1
 JLINK_SCRIPTS_DIR=jtag/
