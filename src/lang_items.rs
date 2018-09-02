@@ -26,7 +26,7 @@ extern "C" fn eh_personality() {}
 
 /// Panic Handler
 #[cfg(not(test))]
-#[panic_implementation]
+#[panic_handler]
 fn panic(_info: &core::panic::PanicInfo) -> ! {
     use board::LEDS;
     use peripherals::gpio::GPIO;
