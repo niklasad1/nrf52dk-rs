@@ -1,8 +1,7 @@
-nrf52dk-rs
+# nrf52dk-rs
 
 ## Requirements
 1. [Rust](http://www.rust-lang.org/) (install via `rustup`)
-3. [arm-none-eabi toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
 
 ### Installation
 
