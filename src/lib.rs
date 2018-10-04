@@ -12,7 +12,7 @@
 // #![deny(missing_docs)]
 // #![deny(warnings)]
 #![crate_type = "staticlib"]
-#![feature(asm, extern_prelude, lang_items, start, naked_functions, const_fn, panic_handler)]
+#![feature(asm, lang_items, start, naked_functions, const_fn)]
 #![no_std]
 
 extern crate cortex_m;
