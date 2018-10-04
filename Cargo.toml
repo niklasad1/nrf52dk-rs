@@ -1,7 +1,7 @@
 [package]
 name = "nrf52dk-rs"
 categories = ["embedded", "hardware-support", "no-std"]
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Niklas Adolfsson <niklasadolfsson1@gmail.com>"]
 license = "MIT"
 description = "bare-metal on nrf52dk"
