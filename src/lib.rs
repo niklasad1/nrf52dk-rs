@@ -9,14 +9,12 @@
 //! For more stable support for nrf52dk:
 //! Checkout [TockOS](https://github.com/helena-project/tock)
 
-// #![deny(missing_docs)]
-// #![deny(warnings)]
+// #![warn(missing_docs)]
 #![crate_type = "staticlib"]
 #![feature(asm, lang_items, start, naked_functions, const_fn)]
 #![no_std]
 
 extern crate cortex_m;
-// extern crate vcell;
 #[macro_use]
 extern crate tock_registers;
 
@@ -29,6 +27,7 @@ pub mod peripherals;
 
 use cortex_m::interrupt::Nr;
 
+/// `nRF52` Interrupts
 #[allow(non_camel_case_types)]
 pub enum Interrupt {
     #[doc = "0 - POWER_CLOCK"]
@@ -210,7 +209,8 @@ pub unsafe extern "C" fn reset_handler() {
         fn main(argc: isize, argv: *const *const u8) -> isize;
     }
 
-    init();
+    init_data_segment();
+    clear_bss();
 
     // Start all clocks
     let clock = &peripherals::clock::CLOCK;
@@ -232,25 +232,24 @@ pub unsafe extern "C" fn reset_handler() {
     main(0, core::ptr::null());
 }
 
-/// Initilization of processor that copies data from Flash to RAM
-/// and zeros out the BSS region
-pub unsafe fn init() {
+// Copy constants, static, etc to the `data segment`
+unsafe fn init_data_segment() {
     let mut src: *mut u32 = &mut __etext;
     let mut dest: *mut u32 = &mut __data_start__;
 
-    // Copy Flash to RAM
-    while dest < &mut __bss_start__ as *mut u32 {
+    while dest < &mut __bss_start__ {
         *dest = *src;
-        dest = ((dest as u32) + 4) as *mut u32;
-        src = ((src as u32) + 4) as *mut u32;
+        dest = dest.offset(1);
+        src = src.offset(1);
     }
+}
 
-    dest = &mut __bss_start__ as *mut u32;
-
-    // Clear BSS region of RAM
-    while dest < &mut __bss_end__ as *mut u32 {
-        *dest = 0;
-        dest = ((dest as u32) + 4) as *mut u32;
+// Clear the `bss segment` (non initialized data)
+unsafe fn clear_bss() {
+    let mut dest: *mut u32 = &mut __bss_start__;
+    while dest < &mut __bss_end__ {
+        dest.write(0);
+        dest = dest.offset(1);
     }
 }
 
