@@ -1,6 +1,6 @@
 eoe 1
 r
-loadfile target/thumbv7em-none-eabi/debug/examples/application.hex
+loadfile target/thumbv7em-none-eabi/debug/examples/app.bin
 r
 g
 q
