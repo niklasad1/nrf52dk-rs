@@ -18,6 +18,7 @@ extern crate cortex_m;
 #[macro_use]
 extern crate tock_registers;
 
+mod crt0;
 mod lang_items;
 
 /// Board specific definitions
@@ -156,14 +157,16 @@ extern "C" {
     /// Start of the text section to copy from
     static mut __etext: u32;
 
-    /// Start of the RAM section to copy data from flash to
+    /// Start of data segment
     static mut __data_start__: u32;
 
-    /// End of the RAM section to copy data to
-    /// and start of the BSS section
+    /// End of the data segment
+    static mut __data_end__: u32;
+
+    /// Start of the bss segment
     static mut __bss_start__: u32;
 
-    /// End of BSS section
+    /// End of the bss segment
     static mut __bss_end__: u32;
 
     /// Stack pointer, i.e., not a ordinary function
@@ -209,8 +212,8 @@ pub unsafe extern "C" fn reset_handler() {
         fn main(argc: isize, argv: *const *const u8) -> isize;
     }
 
-    init_data_segment();
-    clear_bss();
+    crt0::init_data(&mut __etext, &mut __data_start__, &mut __data_end__);
+    crt0::clear_bss(&mut __bss_start__, &mut __bss_end__);
 
     // Start all clocks
     let clock = &peripherals::clock::CLOCK;
@@ -230,27 +233,6 @@ pub unsafe extern "C" fn reset_handler() {
     cortex_m::interrupt::enable();
 
     main(0, core::ptr::null());
-}
-
-// Copy constants, static, etc to the `data segment`
-unsafe fn init_data_segment() {
-    let mut src: *mut u32 = &mut __etext;
-    let mut dest: *mut u32 = &mut __data_start__;
-
-    while dest < &mut __bss_start__ {
-        *dest = *src;
-        dest = dest.offset(1);
-        src = src.offset(1);
-    }
-}
-
-// Clear the `bss segment` (non initialized data)
-unsafe fn clear_bss() {
-    let mut dest: *mut u32 = &mut __bss_start__;
-    while dest < &mut __bss_end__ {
-        dest.write(0);
-        dest = dest.offset(1);
-    }
 }
 
 /// ARM Hard-Fault Handler
