@@ -75,7 +75,8 @@ impl Uart {
             return;
         }
 
-        let ptr = buffer.as_ptr();
+        let ptr = buffer.as_ptr() as u32;
+        assert!(ptr >= 0x2000_0000 && ptr <= 0x2001_0000, "DMA pointer must be in RAM");
         regs.txd_ptr.set(ptr as u32);
         regs.txd_maxcnt.set(buffer.len() as u32);
         regs.enable.write(Enable::ENABLE::ENABLED);
